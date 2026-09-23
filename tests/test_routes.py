@@ -1,3 +1,6 @@
+from app import create_app
+
+
 def test_root_returns_hola_mundo(client):
     resp = client.get("/")
     assert resp.status_code == 200
@@ -10,6 +13,15 @@ def test_health_returns_ok(client):
     assert resp.status_code == 200
     assert resp.data.decode() == "ok"
     assert resp.content_type == "text/plain; charset=utf-8"
+
+
+def test_root_uses_greeting_from_env(monkeypatch):
+    monkeypatch.setenv("GREETING", "Hola desde env")
+    app = create_app()
+    client = app.test_client()
+    resp = client.get("/")
+    assert resp.status_code == 200
+    assert resp.data.decode() == "Hola desde env"
 
 
 def test_unknown_route_returns_404(client):

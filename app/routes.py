@@ -1,11 +1,11 @@
-from flask import Blueprint, Response
+from flask import Blueprint, Response, current_app
 
 bp = Blueprint("main", __name__)
 
 
 @bp.get("/")
 def index() -> Response:
-    return Response("Hola mundo", mimetype="text/plain")
+    return Response(current_app.config["GREETING"], mimetype="text/plain")
 
 
 @bp.get("/health")
